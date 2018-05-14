@@ -1,0 +1,15 @@
+{
+  "name": "restik_task",
+  "version": "0.0.1",
+  "description": "My first NodeJS-based app as Restik test-task",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "k0t3n",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.5.1"
+  }
+}
