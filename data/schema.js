@@ -1,55 +1,60 @@
-const graphQL = require('graphql');
+const {GraphQLObjectType, GraphQLString, GraphQLSchema} = require('graphql');
 const {database} = require('./database');
 
-
-const simpleObjectType = new graphQL.GraphQLObjectType({
+/**
+ * SimpleObjectType
+ *
+ * @field greeting
+ * @field name
+ * @field message
+ */
+const simpleObjectType = new GraphQLObjectType({
     name: 'simpleObjectTypeString',
     fields: {
         greeting: {
-            type: graphQL.GraphQLString,
-            resolve: (root, args, context, info) => {
-                return root.greeting
-            }
+            type: GraphQLString,
+            resolve: (root, args, context, info) => (root.greeting)
         },
         name: {
-            type: graphQL.GraphQLString,
-            resolve: (root, args, context, info) => {
-                return root.name
-            }
+            type: GraphQLString,
+            resolve: (root, args, context, info) => (root.name)
         },
         message: {
-            type: graphQL.GraphQLString,
-            resolve: (root, args, context, info) => {
-                return root.message
-            }
+            type: GraphQLString,
+            resolve: (root, args, context, info) => (root.message)
         }
     },
 });
 
 
-const RootQuery = new graphQL.GraphQLObjectType({
+/**
+ * RootQuery
+ *
+ * @field simple - simple query
+ * @field simpleWithArg - simple query with arg (name)
+ * @field simpleWithContext - simple query with context (ip in message)
+ */
+const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         simple: {
             type: simpleObjectType,
-            resolve() {
-                return database.getItem();
-            },
+            resolve: (root, args, context, info) => (database.getItem())
         },
         simpleWithArg: {
             type: simpleObjectType,
             args: {
                 name: {
-                    type: graphQL.GraphQLString,
+                    type: GraphQLString,
                 }
             },
             resolve: (root, {name,}, args, context, info) => {
                 const item = database.getItem();
 
+                // is arg 'name' exists
                 if (name) {
                     item.name = name;
                 }
-
 
                 return item;
             }
@@ -66,33 +71,39 @@ const RootQuery = new graphQL.GraphQLObjectType({
     }
 });
 
-const RootMutation = new graphQL.GraphQLObjectType({
+
+/**
+ * RootMutation
+ *
+ * @field setName - change name
+ */
+const RootMutation = new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
         setName: {
-            type: graphQL.GraphQLString,
+            type: GraphQLString,
             args: {
                 name: {
-                    type: graphQL.GraphQLString,
+                    type: GraphQLString,
                 }
             },
             resolve: (root, {name}, args, ctx, info) => {
-
+                // is arg 'name' exists
                 if (name) {
                     let newName = database.changeName(name);
 
                     return `Name successfully changed to ${newName}!`;
                 }
                 else {
-                    return `'name' parameter not provided!`
+                    return `Parameter 'name' not provided!`
                 }
             }
         }
     }
-})
+});
 
 
-const schema = new graphQL.GraphQLSchema({
+const schema = new GraphQLSchema({
     query: RootQuery,
     mutation: RootMutation,
 });
