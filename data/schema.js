@@ -54,6 +54,7 @@ const RootQuery = new GraphQLObjectType({
                 // is arg 'name' exists
                 if (name) {
                     item.name = name;
+                    item.message = `${item.greeting}, ${item.name}`
                 }
 
                 return item;
