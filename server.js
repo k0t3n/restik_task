@@ -5,12 +5,9 @@ const KoaConvert = require('koa-convert');
 
 const {schema} = require('./data/schema');
 
-
 const graphQLServer = new Koa();
-
 const GRAPHQL_PORT = 3000;
 
-// TODO разобраться как работает
 graphQLServer.use(
     KoaMount('/', KoaConvert(
         KoaGraphQL({
