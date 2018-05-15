@@ -7,20 +7,20 @@ const simpleObjectType = new graphQL.GraphQLObjectType({
     fields: {
         greeting: {
             type: graphQL.GraphQLString,
-            resolve() {
-                return database.getGreeting();
+            resolve: (root, args, context, info) => {
+                return root.greeting
             }
         },
         name: {
             type: graphQL.GraphQLString,
-            resolve() {
-                return database.getName();
+            resolve: (root, args, context, info) => {
+                return root.name
             }
         },
         message: {
             type: graphQL.GraphQLString,
-            resolve() {
-                return database.getMessage();
+            resolve: (root, args, context, info) => {
+                return `${root.greeting} ${root.name}`
             }
         }
     },
@@ -32,6 +32,27 @@ const Root = new graphQL.GraphQLObjectType({
     fields: {
         simple: {
             type: simpleObjectType,
+            resolve() {
+                return database.getItem();
+            },
+        },
+        simpleWithArg: {
+            type: simpleObjectType,
+            args: {
+                name: {
+                    type: graphQL.GraphQLString,
+                }
+            },
+            resolve: (root, {name,}, args, context, info) => {
+                const item = database.getItem();
+
+                if (name) {
+                    item.name = name;
+                }
+
+
+                return item;
+            }
         }
     }
 });
