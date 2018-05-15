@@ -20,14 +20,14 @@ const simpleObjectType = new graphQL.GraphQLObjectType({
         message: {
             type: graphQL.GraphQLString,
             resolve: (root, args, context, info) => {
-                return `${root.greeting} ${root.name}`
+                return root.message
             }
         }
     },
 });
 
 
-const Root = new graphQL.GraphQLObjectType({
+const RootQuery = new graphQL.GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         simple: {
@@ -53,13 +53,48 @@ const Root = new graphQL.GraphQLObjectType({
 
                 return item;
             }
-        }
+        },
+        simpleWithContext: {
+            type: simpleObjectType,
+            resolve: (root, args, ctx, info) => {
+                const item = database.getItem();
+                item.message += `. Your ip ${ctx.ip}`;
+
+                return item;
+            }
+        },
     }
 });
 
+const RootMutation = new graphQL.GraphQLObjectType({
+    name: 'RootMutationType',
+    fields: {
+        setName: {
+            type: graphQL.GraphQLString,
+            args: {
+                name: {
+                    type: graphQL.GraphQLString,
+                }
+            },
+            resolve: (root, {name}, args, ctx, info) => {
+
+                if (name) {
+                    let newName = database.changeName(name);
+
+                    return `Name successfully changed to ${newName}!`;
+                }
+                else {
+                    return `'name' parameter not provided!`
+                }
+            }
+        }
+    }
+})
+
 
 const schema = new graphQL.GraphQLSchema({
-    query: Root,
+    query: RootQuery,
+    mutation: RootMutation,
 });
 
 module.exports.schema = schema;
