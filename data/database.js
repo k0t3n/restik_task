@@ -16,6 +16,14 @@ class Database {
         return `${this.greeting}, ${this.name}`
     }
 
+    getItem() {
+        return {
+            greeting: this.getGreeting(),
+            name: this.getName(),
+            message: this.getMessage()
+        }
+    }
+
     changeName(newName) {
         this.name = newName;
         return this.name
