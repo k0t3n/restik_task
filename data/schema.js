@@ -13,15 +13,12 @@ const simpleObjectType = new GraphQLObjectType({
     fields: {
         greeting: {
             type: GraphQLString,
-            resolve: (root, args, context, info) => (root.greeting)
         },
         name: {
             type: GraphQLString,
-            resolve: (root, args, context, info) => (root.name)
         },
         message: {
             type: GraphQLString,
-            resolve: (root, args, context, info) => (root.message)
         }
     },
 });
