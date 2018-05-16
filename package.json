@@ -12,7 +12,6 @@
   "dependencies": {
     "graphql": "^0.13.2",
     "koa": "^2.5.1",
-    "koa-convert": "latest",
     "koa-graphql": "^0.7.5",
     "koa-mount": "^3.0.0"
   }

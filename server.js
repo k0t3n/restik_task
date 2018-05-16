@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const KoaMount = require('koa-mount');
 const KoaGraphQL = require('koa-graphql');
-const KoaConvert = require('koa-convert');
 
 const {schema} = require('./data/schema');
 
@@ -9,13 +8,13 @@ const graphQLServer = new Koa();
 const GRAPHQL_PORT = 3000;
 
 graphQLServer.use(
-    KoaMount('/', KoaConvert(
+    KoaMount('/',
         KoaGraphQL({
             schema: schema,
             pretty: true,
             graphiql: true,
         })
-    ))
+    )
 );
 
 
